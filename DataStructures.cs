@@ -465,7 +465,6 @@ namespace TkApi
 			public AccountsHoldings_AccountHoldings AccountHoldings{ get; set; }
 		}
 		public class AccountsHoldings_AccountHoldings {
-			// HACK: Display data is null with this request.
 			[JsonProperty("holding")]
 			[JsonConverter(typeof(ObjectSometimesArrayConverter<Accounts_Accounts_AccountSummary_AccountHoldings_Holding>))]
 			public Accounts_Accounts_AccountSummary_AccountHoldings_Holding[] Holdings { get; set; }
@@ -528,7 +527,7 @@ namespace TkApi
 		#endregion
 		
 		#region Market/Chains
-		public class MarketChain:TKBaseType {
+		public class MarketChain: TKBaseType {
 			[JsonProperty("putcalls")]
 			public Quotes_Quotes PutCalls { get; set; }
 		}
@@ -716,6 +715,9 @@ namespace TkApi
 		public class Quotes_Quotes_InstrumentQuote_Greeks {
 			[JsonProperty("delta")]
 			public string Delta { get; set; }
+			
+			[JsonProperty("impvolatility")]
+			public string ImpVolatility { get; set; }
 		}
 		public class Quotes_Quotes_InstrumentQuote_Instrument {
 			[JsonProperty("desc")]
@@ -795,6 +797,9 @@ namespace TkApi
 			
 			[JsonProperty("lowprice")]
 			public string LowPrice { get; set; }
+			
+			[JsonProperty("openinterest")]
+			public string OpenInterest { get; set; }
 			
 			[JsonProperty("openprice")]
 			public string OpenPrice { get; set; }
@@ -897,10 +902,99 @@ namespace TkApi
 		}
 		#endregion
 		
-		#region Utility/Version
-		public class UtilityVersion: TKBaseType {
-			[JsonProperty("version")]
-			public string Version { get; set; }
+		#region Utility/Documentation
+		public class UtilityDocumentation: TKBaseType {
+			[JsonProperty("base")]
+			public UtilityDocumentation_Base Base { get; set; }
+			
+			[JsonProperty("endpoints")]
+			public UtilityDocumentation_EndPoints EndPoints { get; set; }	
+		}
+		public class UtilityDocumentation_Base {
+			[JsonProperty("uri")]
+			public string Uri { get; set; }
+			
+			[JsonProperty("homepage")]
+			public string Homepage { get; set; }
+			
+			[JsonProperty("parameters")]
+			public UtilityDocumentation_Base_Parameters Parameters { get; set; }
+		}
+		public class UtilityDocumentation_Base_Parameters {
+			[JsonProperty("param")]
+			[JsonConverter(typeof(ObjectSometimesArrayConverter<UtilityDocumentation_Base_Parameters_Param>))]
+			public UtilityDocumentation_Base_Parameters_Param[] Param { get; set; }
+		}
+		public class UtilityDocumentation_Base_Parameters_Param {
+			[JsonProperty("@name")]
+			public string Name { get; set; }
+			
+			[JsonProperty("@optional")]
+			public string Optional { get; set; }
+			
+			[JsonProperty("@type")]
+			public string Type { get; set; }
+			
+			[JsonProperty("@value")]
+			public string Value { get; set; }
+			
+			[JsonProperty("@default")]
+			public string Default { get; set; }
+			
+			[JsonProperty("description")]
+			public string Description { get; set; }
+			
+			[JsonProperty("example")]
+			public string Example { get; set; }
+		}
+		public class UtilityDocumentation_EndPoints {
+			[JsonProperty("client")]
+			[JsonConverter(typeof(ObjectSometimesArrayConverter<UtilityDocumentation_EndPoints_Client>))]
+			public UtilityDocumentation_EndPoints_Client[] Client { get; set; }
+		}
+		public class UtilityDocumentation_EndPoints_Client {
+			[JsonProperty("@name")]
+			public string Name { get; set; }
+			
+			[JsonProperty("@method")]
+			public string Method { get; set; }
+			
+			[JsonProperty("uri")]
+			public string Uri { get; set; }
+			
+			[JsonProperty("description")]
+			public string Description { get; set; }
+			
+			[JsonProperty("parameters")]
+			public UtilityDocumentation_EndPoints_Client_Parameters Parameters { get; set; }
+		}
+		public class UtilityDocumentation_EndPoints_Client_Parameters {
+			[JsonProperty("default")]
+			UtilityDocumentation_EndPoints_Client_Parameters_Default Default { get; set; }
+			
+			[JsonProperty("required")]
+			UtilityDocumentation_EndPoints_Client_Parameters_Required Required { get; set; }
+			
+			[JsonProperty("optional")]
+			UtilityDocumentation_EndPoints_Client_Parameters_Optional Optional { get; set; }
+		}
+		public class UtilityDocumentation_EndPoints_Client_Parameters_Default {
+			[JsonProperty("param")]
+			[JsonConverter(typeof(ObjectSometimesArrayConverter<UtilityDocumentation_Base_Parameters_Param>))]
+			public UtilityDocumentation_Base_Parameters_Param[] Param { get; set; }
+		}
+		public class UtilityDocumentation_EndPoints_Client_Parameters_Required {
+			[JsonProperty("@count")]
+			public string Count { get; set; }
+		
+			[JsonProperty("parm")]
+			[JsonConverter(typeof(ObjectSometimesArrayConverter<UtilityDocumentation_Base_Parameters_Param>))]
+			public UtilityDocumentation_Base_Parameters_Param[] Param { get; set; }
+		}
+		public class UtilityDocumentation_EndPoints_Client_Parameters_Optional {
+			[JsonProperty("param")]
+			[JsonConverter(typeof(ObjectSometimesArrayConverter<UtilityDocumentation_Base_Parameters_Param>))]
+			public UtilityDocumentation_Base_Parameters_Param[] Param { get; set; }
 		}
 		#endregion
 		
@@ -910,7 +1004,14 @@ namespace TkApi
 			public string Time { get; set; }
 		}
 		#endregion
-
+		
+		#region Utility/Version
+		public class UtilityVersion: TKBaseType {
+			[JsonProperty("version")]
+			public string Version { get; set; }
+		}
+		#endregion
+		
 		#region Watchlists
 		public class Watchlists: TKBaseType {
 			[JsonProperty("watchlists")]

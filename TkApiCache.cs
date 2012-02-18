@@ -25,7 +25,7 @@ using System.Collections.Generic;
 
 namespace TkApi {
 	public class TkApiCache : TkApiRaw {
-		private const uint RetryCount = 7; // Count
+		private const uint RetryCount = 5; // Count
 		private const uint RetryDelay = 100; // Milliseconds
 		private uint _cacheTimeout = 0; // How long to cache results for in ms
 		
@@ -98,7 +98,7 @@ namespace TkApi {
 		private List<TkCacheData> _accountsSingle = new List<TkCacheData>();
 		public override AccountsSingle GetAccounts (string accountNumber) {
 			TkCacheData cache = null;
-		
+
 			foreach (TkCacheData c in _accountsSingle) {
 				if (c.Key == accountNumber) {
 					cache = c;
@@ -221,6 +221,32 @@ namespace TkApi {
 			return (Orders)cache.Data;
 		}
 		
+		private List<TkCacheData> _marketChains = new List<TkCacheData>();
+		public override MarketChain GetMarket_Chains (string symbol, MarketChainsType type, MarketChainsExpiration expiration, MarketChainsRange range)	{
+			TkCacheData cache = null;
+			string key = symbol + type.ToString() + expiration.ToString() + range.ToString();
+			
+			foreach (TkCacheData c in _marketChains) {
+				if (c.Key == key) {
+					cache = c;
+					break;
+				}
+			}
+			// Add if not found
+			if (cache == null) {
+				cache = new TkCacheData();
+				cache.Key = key;
+				_marketChains.Add(cache);
+			}
+					
+			TimeSpan ts = DateTime.Now - cache.AccessTime;
+			if (ts.TotalMilliseconds > CacheTimeout) {
+				RetryFunc(() => cache.Data = base.GetMarket_Chains(symbol, type, expiration, range), RetryCount, RetryDelay);
+				cache.AccessTime = DateTime.Now;
+			}
+			return (MarketChain)cache.Data;
+		}
+		
 		private TkCacheData _marketClock = new TkCacheData();
 		public override MarketClock GetMarket_Clock() {
 			TimeSpan ts = DateTime.Now - _marketClock.AccessTime;
@@ -231,14 +257,58 @@ namespace TkApi {
 			return (MarketClock)_marketClock.Data;
 		}
 		
-		
-		/*public override void GetMarket_Quotes (string symbol, string watchlist, bool delayed)
-		{
-			TkCacheData a = new TkCacheData();
-			// TODO:
-			RetryFunc(() => a.Data = base.GetMarket_Quotes(symbol, watchlist, delayed), RetryCount, RetryDelay);
-		}*/
+		private List<TkCacheData> _marketQuotes = new List<TkCacheData>();
+		public override Quotess GetMarket_Quotes(string symbol, string watchlist, bool delayed) {
+			TkCacheData cache = null;
+			string key = symbol + watchlist + delayed.ToString();
 	
+			foreach (TkCacheData c in _marketQuotes) {
+				if (c.Key == key) {
+					cache = c;
+					break;
+				}
+			}
+			// Add if not found
+			if (cache == null) {
+				cache = new TkCacheData();
+				cache.Key = key;
+				_marketQuotes.Add(cache);
+			}
+					
+			TimeSpan ts = DateTime.Now - cache.AccessTime;
+			if (ts.TotalMilliseconds > CacheTimeout) {
+				RetryFunc(() => cache.Data = base.GetMarket_Quotes(symbol, watchlist, delayed), RetryCount, RetryDelay);
+				cache.AccessTime = DateTime.Now;
+			}
+			return (Quotess)cache.Data;
+		}
+	
+		private List<TkCacheData> _marketQuotesOptions = new List<TkCacheData>();
+		public override Quotess GetMarket_Quotes(string underlying, DateTime expiration, MarketQuotesType type, double strike, bool delayed) {
+			TkCacheData cache = null;
+			string key = underlying + expiration.ToString() + type.ToString() + strike.ToString() + delayed.ToString();
+	
+			foreach (TkCacheData c in _marketQuotesOptions) {
+				if (c.Key == key) {
+					cache = c;
+					break;
+				}
+			}
+			// Add if not found
+			if (cache == null) {
+				cache = new TkCacheData();
+				cache.Key = key;
+				_marketQuotesOptions.Add(cache);
+			}
+					
+			TimeSpan ts = DateTime.Now - cache.AccessTime;
+			if (ts.TotalMilliseconds > CacheTimeout) {
+				RetryFunc(() => cache.Data = base.GetMarket_Quotes(underlying, expiration, type, strike, delayed), RetryCount, RetryDelay);
+				cache.AccessTime = DateTime.Now;
+			}
+			return (Quotess)cache.Data;
+		}
+		
 		private TkCacheData _memberProfile = new TkCacheData();
 		public override MemberProfile GetMember_Profile() {
 			TimeSpan ts = DateTime.Now - _memberProfile.AccessTime;
@@ -249,14 +319,14 @@ namespace TkApi {
 			return (MemberProfile)_memberProfile.Data;
 		}
 		
-		private TkCacheData _utilityVersion = new TkCacheData();
-		public override UtilityVersion GetUtility_Version() {
-			TimeSpan ts = DateTime.Now - _memberProfile.AccessTime;
+		private TkCacheData _utilityDocumentation = new TkCacheData();
+		public override UtilityDocumentation GetUtility_Documentation() {
+			TimeSpan ts = DateTime.Now - _utilityDocumentation.AccessTime;
 			if (ts.TotalMilliseconds > CacheTimeout) {
-				RetryFunc(() => _utilityVersion.Data = base.GetUtility_Version(), RetryCount, RetryDelay);
-				_utilityVersion.AccessTime = DateTime.Now;
+				RetryFunc(() => _utilityVersion.Data = base.GetUtility_Documentation(), RetryCount, RetryDelay);
+				_utilityDocumentation.AccessTime = DateTime.Now;
 			}
-			return (UtilityVersion)_utilityVersion.Data;
+			return (UtilityDocumentation)_utilityDocumentation.Data;
 		}
 		
 		private TkCacheData _utilityStatus = new TkCacheData();
@@ -267,6 +337,16 @@ namespace TkApi {
 				_utilityStatus.AccessTime = DateTime.Now;
 			}
 			return (UtilityStatus)_utilityStatus.Data;
+		}
+	
+		private TkCacheData _utilityVersion = new TkCacheData();
+		public override UtilityVersion GetUtility_Version() {
+			TimeSpan ts = DateTime.Now - _memberProfile.AccessTime;
+			if (ts.TotalMilliseconds > CacheTimeout) {
+				RetryFunc(() => _utilityVersion.Data = base.GetUtility_Version(), RetryCount, RetryDelay);
+				_utilityVersion.AccessTime = DateTime.Now;
+			}
+			return (UtilityVersion)_utilityVersion.Data;
 		}
 
 		private TkCacheData _watchlists = new TkCacheData();

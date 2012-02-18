@@ -1,6 +1,6 @@
 TkApi.NET is an implementation of the TradeKing API in .NET.
 
-This project is in the alpha stage.  Most of the API is feature
+This project is in the alpha stage.  The API is feature
 complete.  However, it has not been tested.  I do not recommend
 using this in its current state.
 

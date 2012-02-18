@@ -183,7 +183,6 @@ namespace TkApi {
 		}
 		
 		private class RequestData {
-			// Make Properties and do constructor
 			public RequestMethod method;
 			public string call;
 			public bool authRequired;
@@ -214,7 +213,6 @@ namespace TkApi {
 				throw new NotSupportedException("TKAPI.NET only supports version " + TkVersion + ".  Server is using version " + version.Version + ".");
 			}
 		}
-		
 		public TkApiRaw(string consumerKey, string consumerSecret, string accessToken, string accessSecret, bool allowTrades) {
 			ConsumerKey = consumerKey;
 			ConsumerSecret = consumerSecret;
@@ -244,7 +242,6 @@ namespace TkApi {
 			return JsonConvert.DeserializeObject<AccountsBalancesSingle>(response);
 		}
 		public virtual AccountsHistory GetAccounts_History(string accountNumber, AccountsHistory_Request_Range range, AccountsHistory_Request_Transactions transactions) {
-			// TODO: THIS DOESN"T WORK
 			NameValueCollection q = new NameValueCollection();
 			q.Add("range", range.ToString().ToLower());
 			q.Add("transactions", transactions.ToString().ToLower());
@@ -274,21 +271,21 @@ namespace TkApi {
 			string response = RequestSync(req);
 			return JsonConvert.DeserializeObject<OrdersPost>(response);
 		}
-		public void PostAccount_OrderPreview(string accountNumber, string fixml) {
+		public OrdersPost PostAccount_OrderPreview(string accountNumber, string fixml) {
 			RequestData req = new RequestData(RequestMethod.POST, "accounts/" + accountNumber + "/orders/preview", true, null, null, fixml);
-			string result = RequestSync(req);
-			Console.WriteLine(result);
+			string response = RequestSync(req);
+			return JsonConvert.DeserializeObject<OrdersPost>(response);
 		}
-		public void GetMarket_Chains(string symbol, MarketChainsType type, MarketChainsExpiration expiration, MarketChainsRange range) {
+		public virtual MarketChain GetMarket_Chains(string symbol, MarketChainsType type, MarketChainsExpiration expiration, MarketChainsRange range) {
 			NameValueCollection q = new NameValueCollection();
 			q.Add ("underlying", symbol);
-			q.Add("type", type.ToString());
-			q.Add("expiration", expiration.ToString());
-			q.Add("range", range.ToString());
+			q.Add("type", type.ToString().ToLower());
+			q.Add("expiration", expiration.ToString().ToLower());
+			q.Add("range", range.ToString().ToLower());
 			
 			RequestData req = new RequestData(RequestMethod.GET, "market/chains", true, q, null, null);
-			string result = RequestSync(req);
-			Console.WriteLine(result);
+			string response = RequestSync(req);
+			return JsonConvert.DeserializeObject<MarketChain>(response);
 		}
 		public virtual MarketClock GetMarket_Clock() {
 			RequestData req = new RequestData(RequestMethod.GET, "market/clock", false, null, null, null);
@@ -299,47 +296,44 @@ namespace TkApi {
 			NameValueCollection q = new NameValueCollection();
 			if (!String.IsNullOrEmpty(symbol)) q.Add("symbols", symbol);
 			if (!String.IsNullOrEmpty(watchlist)) q.Add("watchlist", watchlist);
-			q.Add("delayed", delayed.ToString());
+			q.Add("delayed", delayed.ToString().ToLower());
 			
 			RequestData req = new RequestData(RequestMethod.GET, "market/quotes", true, q, null, null);
 			string response = RequestSync(req);
-			return JsonConvert.DeserializeObject<Quotess>(response);
-			
+			return JsonConvert.DeserializeObject<Quotess>(response);		
 		}
-		public virtual Quotess GetMarket_Quotes(string[] symbols, string watchlist, bool delayed) {
+		public Quotess GetMarket_Quotes(string[] symbols, string watchlist, bool delayed) {
 			StringBuilder symbol = new StringBuilder();
 			foreach (string idx in symbols) {
 				symbol.Append(idx + ",");
 			}
 			
 			// Remove last comma
-			string s = symbol.ToString ();
+			string s = symbol.ToString();
 			s = s.Substring(0,s.Length - 1);
 			return GetMarket_Quotes(s, watchlist, delayed);
 		}
-		public void GetMarket_Quotes(string underlying, DateTime expiration, MarketQuotesType type, double strike, bool delayed) {
+		public virtual Quotess GetMarket_Quotes(string underlying, DateTime expiration, MarketQuotesType type, double strike, bool delayed) {
 			NameValueCollection q = new NameValueCollection();
 			q.Add("underlying", underlying);
-			q.Add("expiration", expiration.ToString());
-			q.Add("type", type.ToString("YYYY-MM-DD"));
+			q.Add("expiration", expiration.ToString("yyyy-MM-dd"));
+			q.Add("type", type.ToString().ToLower());
 			q.Add("strike", strike.ToString());
-			q.Add("delayed", delayed.ToString());
+			q.Add("delayed", delayed.ToString().ToLower());
 			
 			RequestData req = new RequestData(RequestMethod.GET, "market/quotes", true, q, null, null);
-			string result = RequestSync(req);
-			Console.WriteLine(result);
+			string response = RequestSync(req);
+			return JsonConvert.DeserializeObject<Quotess>(response);
 		}
 		public virtual MemberProfile GetMember_Profile() {
 			RequestData req = new RequestData(RequestMethod.GET, "member/profile", true, null, null, null);
 			string response = RequestSync(req);
 			return JsonConvert.DeserializeObject<MemberProfile>(response);
 		}
-		public void GetUtility_Documentation() {
+		public virtual UtilityDocumentation GetUtility_Documentation() {
 			RequestData req = new RequestData(RequestMethod.GET, "utility/documentation", false, null, null, null);
-			string result = RequestSync(req);
-			//Console.WriteLine(result);
-			// TODO: Need to impliment
-			throw new NotImplementedException("GetUtility_Documentation is least important");
+			string response = RequestSync(req);
+			return JsonConvert.DeserializeObject<UtilityDocumentation>(response);
 		}
 		public virtual UtilityStatus GetUtility_Status() {
 			RequestData req = new RequestData(RequestMethod.GET, "utility/status", false, null, null, null);
@@ -405,14 +399,11 @@ namespace TkApi {
 		}
 		public Watchlists DeleteWatchList(string id, string symbol) {
 			RequestData req = new RequestData(RequestMethod.DELETE, "watchlists/" + id + "/symbols/" + symbol, true, null, null, null);
-			string result = RequestSync(req);
 			string response = RequestSync(req);
 			return JsonConvert.DeserializeObject<Watchlists>(response);
 		}
 		
-		
-		private static bool Validator (object sender, X509Certificate certificate, X509Chain chain, 
-                                      SslPolicyErrors sslPolicyErrors) {
+		private static bool Validator (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) {
 			return true;
 		}
 		private string RequestSync(RequestData req) {
@@ -504,7 +495,6 @@ namespace TkApi {
 			//Console.WriteLine(resp);
 			return StripResponseProperty(resp);
 		}
-		
 		private string StripResponseProperty(string json)
 		{
 			if (String.IsNullOrEmpty(json))
