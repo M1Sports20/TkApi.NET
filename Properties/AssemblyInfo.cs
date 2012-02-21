@@ -15,7 +15,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with TkApi.NET.  If not, see <http://www.gnu.org/licenses/>.
 
-Copyright (c) 2011, Michael D. Spradling (mike@mspradling.com)
+Copyright (c) 2011-2012, Michael D. Spradling (mike@mspradling.com)
 */
 #endregion
 
@@ -35,7 +35,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("TkApi.NET")]
-[assembly: AssemblyCopyright("Copyright 2011")]
+[assembly: AssemblyCopyright("Copyright 2011-2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -2,3 +2,4 @@
 obj/
 bin/
 3rdParty/
+*.pidb
