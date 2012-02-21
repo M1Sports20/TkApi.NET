@@ -21,12 +21,13 @@ Copyright (c) 2011-2012, Michael D. Spradling (mike@mspradling.com)
 
 using System;
 using TkApi.DataStructures;
-using System.Collections.Generic;
 
 namespace TkApi {
 	public class TkRestCache : TkRest {
 		private const uint RetryCount = 5; // Count
 		private const uint RetryDelay = 100; // Milliseconds
+		private const int CacheSize = 10; // How many web responses to cache max.
+
 		private uint _cacheTimeout = 0; // How long to cache results for in ms
 		
 		private class TkCacheData {
@@ -95,7 +96,7 @@ namespace TkApi {
 			return (AccountsBalance)_accountsBalances.Data;
 		}
 		
-		private List<TkCacheData> _accountsSingle = new List<TkCacheData>();
+		private Fifo<TkCacheData> _accountsSingle = new Fifo<TkCacheData>(CacheSize);
 		public override AccountsSingle GetAccounts (string accountNumber) {
 			TkCacheData cache = null;
 
@@ -120,7 +121,7 @@ namespace TkApi {
 			return (AccountsSingle)cache.Data;
 		}
 		
-		private List<TkCacheData> _accountsBalancesSingle = new List<TkCacheData>();
+		private Fifo<TkCacheData> _accountsBalancesSingle = new Fifo<TkCacheData>(CacheSize);
 		public override AccountsBalancesSingle GetAccounts_Balances (string accountNumber) {
 			TkCacheData cache = null;
 		
@@ -145,7 +146,7 @@ namespace TkApi {
 			return (AccountsBalancesSingle)cache.Data;
 		}
 		
-		private List<TkCacheData> _accounts_History = new List<TkCacheData>();
+		private Fifo<TkCacheData> _accounts_History = new Fifo<TkCacheData>(CacheSize);
 		public override AccountsHistory GetAccounts_History(string accountNumber, AccountsHistory_Request_Range range, AccountsHistory_Request_Transactions transactions) {
 			TkCacheData cache = null;
 			string key = accountNumber + range.ToString() + transactions.ToString();
@@ -171,7 +172,7 @@ namespace TkApi {
 			return (AccountsHistory)cache.Data;
 		}
 		
-		private List<TkCacheData> _accountsHoldings = new List<TkCacheData>();
+		private Fifo<TkCacheData> _accountsHoldings = new Fifo<TkCacheData>(CacheSize);
 		public override AccountsHoldings GetAccount_Holdings(string accountNumber) {
 			TkCacheData cache = null;
 		
@@ -196,7 +197,7 @@ namespace TkApi {
 			return (AccountsHoldings)cache.Data;
 		}
 		
-		private List<TkCacheData> _accountsOrders = new List<TkCacheData>();
+		private Fifo<TkCacheData> _accountsOrders = new Fifo<TkCacheData>(CacheSize);
 		public override Orders GetAccounts_Orders (string accountNumber) {
 			TkCacheData cache = null;
 		
@@ -221,7 +222,7 @@ namespace TkApi {
 			return (Orders)cache.Data;
 		}
 		
-		private List<TkCacheData> _marketChains = new List<TkCacheData>();
+		private Fifo<TkCacheData> _marketChains = new Fifo<TkCacheData>(CacheSize);
 		public override MarketChain GetMarket_Chains (string symbol, MarketChainsType type, MarketChainsExpiration expiration, MarketChainsRange range)	{
 			TkCacheData cache = null;
 			string key = symbol + type.ToString() + expiration.ToString() + range.ToString();
@@ -257,7 +258,7 @@ namespace TkApi {
 			return (MarketClock)_marketClock.Data;
 		}
 		
-		private List<TkCacheData> _marketQuotes = new List<TkCacheData>();
+		private Fifo<TkCacheData> _marketQuotes = new Fifo<TkCacheData>(CacheSize);
 		public override Quotess GetMarket_Quotes(string symbol, string watchlist, bool delayed) {
 			TkCacheData cache = null;
 			string key = symbol + watchlist + delayed.ToString();
@@ -283,7 +284,7 @@ namespace TkApi {
 			return (Quotess)cache.Data;
 		}
 	
-		private List<TkCacheData> _marketQuotesOptions = new List<TkCacheData>();
+		private Fifo<TkCacheData> _marketQuotesOptions = new Fifo<TkCacheData>(CacheSize);
 		public override Quotess GetMarket_Quotes(string underlying, DateTime expiration, MarketQuotesType type, double strike, bool delayed) {
 			TkCacheData cache = null;
 			string key = underlying + expiration.ToString() + type.ToString() + strike.ToString() + delayed.ToString();
@@ -359,7 +360,7 @@ namespace TkApi {
 			return (Watchlists)_watchlists.Data;
 		}
 
-		private List<TkCacheData> _watchlistItems = new List<TkCacheData>();
+		private Fifo<TkCacheData> _watchlistItems = new Fifo<TkCacheData>(CacheSize);
 		public override WatchlistsItems GetWatchlists(string id) {
 			TkCacheData cache = null;
 		

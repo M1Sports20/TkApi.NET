@@ -45,9 +45,6 @@
     <Reference Include="Newtonsoft.Json.Net35">
       <HintPath>3rdParty\JSON.NET\Bin\Net35\Newtonsoft.Json.Net35.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.Net35">
-      <HintPath>3rdParty\JSON.NET\Bin\Net35\Newtonsoft.Json.Net35.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -62,6 +59,7 @@
     <Compile Include="TkRestCache.cs" />
     <Compile Include="TkApi.cs" />
     <Compile Include="TkRest.cs" />
+    <Compile Include="3rdParty\Fifo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
