@@ -24,7 +24,7 @@ using TkApi.DataStructures;
 using System.Collections.Generic;
 
 namespace TkApi {
-	public class TkApiCache : TkApiRaw {
+	public class TkRestCache : TkRest {
 		private const uint RetryCount = 5; // Count
 		private const uint RetryDelay = 100; // Milliseconds
 		private uint _cacheTimeout = 0; // How long to cache results for in ms
@@ -35,10 +35,10 @@ namespace TkApi {
 			public DateTime AccessTime = new DateTime(0);
 		}
 		
-		public TkApiCache(string consumerKey, string consumerSecret, string accessToken, string accessSecret):
+		public TkRestCache(string consumerKey, string consumerSecret, string accessToken, string accessSecret):
 			base(consumerKey, consumerSecret, accessToken, accessSecret) {
 		}
-		public TkApiCache(string consumerKey, string consumerSecret, string accessToken, string accessSecret, bool allowTrades):
+		public TkRestCache(string consumerKey, string consumerSecret, string accessToken, string accessSecret, bool allowTrades):
 			base(consumerKey, consumerSecret, accessToken, accessSecret, allowTrades) {
 		}
 		

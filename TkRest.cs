@@ -32,7 +32,7 @@ using System.Net;
 using System.Web;
 
 namespace TkApi {	
-	public class TkApiRaw {
+	public class TkRest {
 		private enum RequestFormat {
 			XML,
 			JSON,
@@ -200,7 +200,7 @@ namespace TkApi {
 			}
 		}
 		
-		public TkApiRaw(string consumerKey, string consumerSecret, string accessToken, string accessSecret) {
+		public TkRest(string consumerKey, string consumerSecret, string accessToken, string accessSecret) {
 			ConsumerKey = consumerKey;
 			ConsumerSecret = consumerSecret;
 			AccessToken = accessToken;
@@ -213,7 +213,7 @@ namespace TkApi {
 				throw new NotSupportedException("TKAPI.NET only supports version " + TkVersion + ".  Server is using version " + version.Version + ".");
 			}
 		}
-		public TkApiRaw(string consumerKey, string consumerSecret, string accessToken, string accessSecret, bool allowTrades) {
+		public TkRest(string consumerKey, string consumerSecret, string accessToken, string accessSecret, bool allowTrades) {
 			ConsumerKey = consumerKey;
 			ConsumerSecret = consumerSecret;
 			AccessToken = accessToken;
@@ -511,7 +511,6 @@ namespace TkApi {
 			}
 	
 			throw new FormatException("Unknown Response from TK Server");
-			//return string.Empty;
 		}
 	}
 }

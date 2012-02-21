@@ -23,17 +23,17 @@ using System;
 using TkApi.DataStructures;
 
 namespace TkApi {
-	public class Tk {
+	public class TkApi {
 		private const uint CacheTimeout = 1000; // One second(s)
-		private TkApiCache tk = null;
+		private TkRestCache tk = null;
 		
 		public enum MarketStatus {
 			Open,
 			Closed
 		};
 		
-		public Tk (string consumerKey, string consumerSecret, string accessToken, string accessSecret) {
-			tk = new TkApiCache(consumerKey, consumerSecret, accessToken, accessSecret);
+		public TkApi (string consumerKey, string consumerSecret, string accessToken, string accessSecret) {
+			tk = new TkRestCache(consumerKey, consumerSecret, accessToken, accessSecret);
 			tk.CacheTimeout = CacheTimeout;
 		}
 		
@@ -293,7 +293,7 @@ namespace TkApi {
 			return DateTime.Parse(status.Time.Substring(0,status.Time.LastIndexOf(' ')));
 		}
 		#endregion
-		#region Utility/Versoin Accessors
+		#region Utility/Version Accessors
 		public string GetApiVersion() {
 			UtilityVersion version = tk.GetUtility_Version();
 			return version.Version;

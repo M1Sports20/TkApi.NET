@@ -46,25 +46,22 @@
       <HintPath>3rdParty\JSON.NET\Bin\Net35\Newtonsoft.Json.Net35.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json.Net35">
-      <HintPath>..\TKDashboard\JSON.NET\Bin\Net35\Newtonsoft.Json.Net35.dll</HintPath>
+      <HintPath>3rdParty\JSON.NET\Bin\Net35\Newtonsoft.Json.Net35.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Xml" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataStructures.cs" />
-    <Compile Include="TkApiRaw.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="3rdParty\OAuthBase.cs" />
-    <Compile Include="TkApiCache.cs" />
-    <Compile Include="Tk.cs" />
+    <Compile Include="Fixml.cs" />
+    <Compile Include="TkRestCache.cs" />
+    <Compile Include="TkApi.cs" />
+    <Compile Include="TkRest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
