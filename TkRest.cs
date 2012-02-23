@@ -204,7 +204,7 @@ namespace TkApi {
 			string response = RequestSync(req);
 			return JsonConvert.DeserializeObject<AccountsBalancesSingle>(response);
 		}
-		public virtual AccountsHistory GetAccounts_History(string accountNumber, AccountsHistory_Request_Range range, AccountsHistory_Request_Transactions transactions) {
+		public virtual AccountsHistory GetAccounts_History(string accountNumber, AccountsHistory_Range range, AccountsHistory_Transactions transactions) {
 			NameValueCollection q = new NameValueCollection();
 			q.Add("range", range.ToString().ToLower());
 			q.Add("transactions", transactions.ToString().ToLower());
@@ -239,7 +239,7 @@ namespace TkApi {
 			string response = RequestSync(req);
 			return JsonConvert.DeserializeObject<OrdersPost>(response);
 		}
-		public virtual MarketChain GetMarket_Chains(string symbol, MarketChainsType type, MarketChainsExpiration expiration, MarketChainsRange range) {
+		public virtual MarketChain GetMarket_Chains(string symbol, MarketChains_Type type, MarketChains_Expiration expiration, MarketChains_Range range) {
 			NameValueCollection q = new NameValueCollection();
 			q.Add ("underlying", symbol);
 			q.Add("type", type.ToString().ToLower());
@@ -276,7 +276,7 @@ namespace TkApi {
 			s = s.Substring(0,s.Length - 1);
 			return GetMarket_Quotes(s, watchlist, delayed);
 		}
-		public virtual Quotess GetMarket_Quotes(string underlying, DateTime expiration, MarketQuotesType type, double strike, bool delayed) {
+		public virtual Quotess GetMarket_Quotes(string underlying, DateTime expiration, MarketQuotes_Type type, double strike, bool delayed) {
 			NameValueCollection q = new NameValueCollection();
 			q.Add("underlying", underlying);
 			q.Add("expiration", expiration.ToString("yyyy-MM-dd"));

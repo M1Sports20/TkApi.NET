@@ -147,7 +147,7 @@ namespace TkApi {
 		}
 		
 		private Fifo<TkCacheData> _accounts_History = new Fifo<TkCacheData>(CacheSize);
-		public override AccountsHistory GetAccounts_History(string accountNumber, AccountsHistory_Request_Range range, AccountsHistory_Request_Transactions transactions) {
+		public override AccountsHistory GetAccounts_History(string accountNumber, AccountsHistory_Range range, AccountsHistory_Transactions transactions) {
 			TkCacheData cache = null;
 			string key = accountNumber + range.ToString() + transactions.ToString();
 			
@@ -223,7 +223,7 @@ namespace TkApi {
 		}
 		
 		private Fifo<TkCacheData> _marketChains = new Fifo<TkCacheData>(CacheSize);
-		public override MarketChain GetMarket_Chains (string symbol, MarketChainsType type, MarketChainsExpiration expiration, MarketChainsRange range)	{
+		public override MarketChain GetMarket_Chains (string symbol, MarketChains_Type type, MarketChains_Expiration expiration, MarketChains_Range range)	{
 			TkCacheData cache = null;
 			string key = symbol + type.ToString() + expiration.ToString() + range.ToString();
 			
@@ -285,7 +285,7 @@ namespace TkApi {
 		}
 	
 		private Fifo<TkCacheData> _marketQuotesOptions = new Fifo<TkCacheData>(CacheSize);
-		public override Quotess GetMarket_Quotes(string underlying, DateTime expiration, MarketQuotesType type, double strike, bool delayed) {
+		public override Quotess GetMarket_Quotes(string underlying, DateTime expiration, MarketQuotes_Type type, double strike, bool delayed) {
 			TkCacheData cache = null;
 			string key = underlying + expiration.ToString() + type.ToString() + strike.ToString() + delayed.ToString();
 	

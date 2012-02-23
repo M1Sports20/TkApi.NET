@@ -56,6 +56,55 @@ namespace TkApi
 	#endregion
 	
 	namespace DataStructures {
+		public enum MarketChains_Type {
+			Call_And_Put,
+			Covered_Call,
+			Call,
+			Put,
+		}
+		public enum MarketChains_Expiration {
+			Jan,
+			Feb,
+			Mar,
+			Apr,
+			May,
+			Jun,
+			Jul,
+			Aug,
+			Sep,
+			Oct,
+			Nov,
+			Dec,
+			All,
+			Leaps,
+			All_Leaps,
+			Weeklys
+		}
+		public enum MarketChains_Range {
+			Out_The_Money,
+			In_The_Money,
+			Near_The_Money,
+			At_The_Money,
+			More,
+			All_The_Money
+		}
+		public enum MarketQuotes_Type {
+			Call,
+			Put
+		}	
+		public enum AccountsHistory_Range {
+			All,
+			Today,
+			Current_Week,
+			Current_Month,
+			Last_Month
+		}
+		public enum AccountsHistory_Transactions {
+			All,
+			Bookkeeping,
+			Trade
+		}
+		
 		public class TKBaseType {
 			[JsonProperty("@id")]
 			public string Id { get; set; }
@@ -74,6 +123,8 @@ namespace TkApi
 			
 			[JsonProperty("error")] // Some errors are here
 			public string Error { get; set; }
+			
+
 		}
 		
 		public class Accounts: TKBaseType {
@@ -328,55 +379,6 @@ namespace TkApi
 		public class AccountsBalancesSingle: TKBaseType {
 			[JsonProperty("accountbalance")]
 			public Accounts.TAccounts.TAccountSummary.TAccountBalance AccountBalance { get; set; }
-		}
-		
-		public enum MarketChainsType {
-			CALL_AND_PUT,
-			COVERED_CALL,
-			CALL,
-			PUT,
-		}
-		public enum MarketChainsExpiration {
-			JAN,
-			FEB,
-			MAR,
-			APR,
-			MAY,
-			JUN,
-			JUL,
-			AUG,
-			SEP,
-			OCT,
-			NOV,
-			DEC,
-			ALL,
-			LEAPS,
-			ALL_LEAPS,
-			WEEKLYS,
-		}
-		public enum MarketChainsRange {
-			OUT_THE_MONEY,
-			IN_THE_MONEY,
-			NEAR_THE_MONEY,
-			AT_THE_MONEY,
-			MORE,
-			ALL_THE_MONEY,
-		}
-		public enum MarketQuotesType {
-			CALL,
-			PUT,
-		}	
-		public enum AccountsHistory_Request_Range {
-			All,
-			Today,
-			Current_Week,
-			Current_Month,
-			Last_Month
-		}
-		public enum AccountsHistory_Request_Transactions {
-			All,
-			Bookkeeping,
-			Trade
 		}
 		
 		public class AccountsHistory: TKBaseType {
