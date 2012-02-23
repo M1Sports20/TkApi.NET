@@ -50,8 +50,8 @@ namespace TkApi {
 		#endregion
 		#region Member/Profile Accessors
 		public bool GetAccountAllowsMutualFund(uint accountNumber) {
-			MemberProfile_UserData_Account[] accounts = tk.GetMember_Profile().UserData.Account;
-			foreach (MemberProfile_UserData_Account account in accounts) {
+		    MemberProfile.TUserData.TAccount[] accounts = tk.GetMember_Profile().UserData.Account;
+			foreach (MemberProfile.TUserData.TAccount account in accounts) {
 				if (Convert.ToUInt32(account.Account) == accountNumber) {
 					return Convert.ToBoolean(account.FundTrading);
 				}
@@ -59,8 +59,8 @@ namespace TkApi {
 			throw new InvalidOperationException("Failed to find if account allows mutual funds for account number: " + accountNumber.ToString());
 		}
 		public bool GetIsAccountIRA(uint accountNumber) {
-			MemberProfile_UserData_Account[] accounts = tk.GetMember_Profile().UserData.Account;
-			foreach (MemberProfile_UserData_Account account in accounts) {
+			MemberProfile.TUserData.TAccount[] accounts = tk.GetMember_Profile().UserData.Account;
+			foreach (MemberProfile.TUserData.TAccount account in accounts) {
 				if (Convert.ToUInt32(account.Account) == accountNumber) {
 					return Convert.ToBoolean(account.IRA);
 				}
@@ -68,8 +68,8 @@ namespace TkApi {
 			throw new InvalidOperationException("Failed to find if account is an IRA for account number: " + accountNumber.ToString());
 		}
 		public bool GetAccountAllowsMarginTrading(uint accountNumber) {
-			MemberProfile_UserData_Account[] accounts = tk.GetMember_Profile().UserData.Account;
-			foreach (MemberProfile_UserData_Account account in accounts) {
+			MemberProfile.TUserData.TAccount[] accounts = tk.GetMember_Profile().UserData.Account;
+			foreach (MemberProfile.TUserData.TAccount account in accounts) {
 				if (Convert.ToUInt32(account.Account) == accountNumber) {
 					return Convert.ToBoolean(account.MarginTrading);
 				}
@@ -77,8 +77,8 @@ namespace TkApi {
 			throw new InvalidOperationException("Failed to find if margin trading is allowed for account number: " + accountNumber.ToString());
 		}
 		public string GetAccountNickname(uint accountNumber) {
-			MemberProfile_UserData_Account[] accounts = tk.GetMember_Profile().UserData.Account;
-			foreach (MemberProfile_UserData_Account account in accounts) {
+			MemberProfile.TUserData.TAccount[] accounts = tk.GetMember_Profile().UserData.Account;
+			foreach (MemberProfile.TUserData.TAccount account in accounts) {
 				if (Convert.ToUInt32(account.Account) == accountNumber) {
 					return account.Nickname;
 				}
@@ -86,8 +86,8 @@ namespace TkApi {
 			throw new InvalidOperationException("Failed to find account nickname for account number: " + accountNumber.ToString());
 		}
 		public uint GetAccountOptionLevel(uint accountNumber) {
-			MemberProfile_UserData_Account[] accounts = tk.GetMember_Profile().UserData.Account;
-			foreach (MemberProfile_UserData_Account account in accounts) {
+			MemberProfile.TUserData.TAccount[] accounts = tk.GetMember_Profile().UserData.Account;
+			foreach (MemberProfile.TUserData.TAccount account in accounts) {
 				if (Convert.ToUInt32(account.Account) == accountNumber) {
 					return Convert.ToUInt32(account.OptionLevel);
 				}
@@ -95,8 +95,8 @@ namespace TkApi {
 			throw new InvalidOperationException("Failed to find option level for account number: " + accountNumber.ToString());
 		}
 		public bool GetIsAccountAllowsStock(uint accountNumber) {
-			MemberProfile_UserData_Account[] accounts = tk.GetMember_Profile().UserData.Account;
-			foreach (MemberProfile_UserData_Account account in accounts) {
+			MemberProfile.TUserData.TAccount[] accounts = tk.GetMember_Profile().UserData.Account;
+			foreach (MemberProfile.TUserData.TAccount account in accounts) {
 				if (Convert.ToUInt32(account.Account) == accountNumber) {
 					return Convert.ToBoolean(account.StockTrading);
 				}
@@ -117,7 +117,7 @@ namespace TkApi {
 		}
 		public string GetUserMiddleInitial() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "primaryMiddleInitial") {
 					return profile.Value;
 				}
@@ -126,7 +126,7 @@ namespace TkApi {
 		}
 		public string GetUserLastName() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "primaryLastName") {
 					return profile.Value;
 				}
@@ -135,7 +135,7 @@ namespace TkApi {
 		}
 		public string GetLoginId() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "login_id") {
 					return profile.Value;
 				}
@@ -144,7 +144,7 @@ namespace TkApi {
 		}
 		public string GetZipCode() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "zip") {
 					return profile.Value;
 				}
@@ -153,7 +153,7 @@ namespace TkApi {
 		}
 		public string GetUserFirstName() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "primaryFirstName") {
 					return profile.Value;
 				}
@@ -162,7 +162,7 @@ namespace TkApi {
 		}
 		public bool IsRealTimeQuoteEnabled() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "rtq") {
 					if (profile.Value == "Y")
 						return true;
@@ -174,7 +174,7 @@ namespace TkApi {
 		}
 		public string GetUserEmailAddress1() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "emailAddress1") {
 					return profile.Value;
 				}
@@ -183,7 +183,7 @@ namespace TkApi {
 		}
 		public string GetUserEmailAddress2() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "emailAddress2") {
 					return profile.Value;
 				}
@@ -192,7 +192,7 @@ namespace TkApi {
 		}
 		public uint GetLogoutExpireMinutes() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "expireMins") {
 					return Convert.ToUInt32(profile.Value);
 				}
@@ -201,7 +201,7 @@ namespace TkApi {
 		}
 		public uint GetDefaultAccountNumber() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "defaultAccount") {
 					return Convert.ToUInt32(profile.Value);
 				}
@@ -210,7 +210,7 @@ namespace TkApi {
 		}
 		public bool IsTradingPasswordEnabled() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "useTradingPassword") {
 					if (profile.Value == "Y")
 						return true;
@@ -222,7 +222,7 @@ namespace TkApi {
 		}
 		public bool GetUserHaveNewMessage() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "NewMsg") {
 					if (profile.Value == "Y")
 						return true;
@@ -234,7 +234,7 @@ namespace TkApi {
 		}
 		public bool GetUserSkipOrderPreview() {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "skiporderPreview") {
 					if (profile.Value == "Y")
 						return true;
@@ -246,7 +246,7 @@ namespace TkApi {
 		}
 		public DateTime GetUserLastDownload(uint accountNumber) {
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "ofxLastDownload-" + accountNumber.ToString()) {
 					return DateTime.Parse(profile.Value);
 				}
@@ -256,7 +256,7 @@ namespace TkApi {
 		public bool GetUserAgreedToFdic() {
 			// TODO, Test, i don't know if this is a bool
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "AGREEMENT_FDIC") {
 					if (profile.Value == "Y")
 						return true;
@@ -267,9 +267,8 @@ namespace TkApi {
 			throw new InvalidOperationException("Failed to get if user agreed to FDIC agreement");
 		}
 		public string GetUserTradingDefaults() {
-			//Todo Break this up more
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "tradingDefaults") {
 					return profile.Value;
 				}
@@ -277,9 +276,8 @@ namespace TkApi {
 			throw new InvalidOperationException("Failed to get users trading defaults");
 		}
 		public string GetUserOptionChainDefaults() {
-			//TODO Break this up more
 			MemberProfile member = tk.GetMember_Profile();
-			foreach (MemberProfile_UserData_UserProfile_Entry profile in member.UserData.UserProfile.Entry) {
+			foreach (MemberProfile.TUserData.TUserProfile.TEntry profile in member.UserData.UserProfile.Entry) {
 				if (profile.Name == "optionChainDefaults") {
 					return profile.Value;
 				}

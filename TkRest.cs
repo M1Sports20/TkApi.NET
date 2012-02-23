@@ -44,43 +44,6 @@ namespace TkApi {
 			DELETE,
 		}
 		
-		public enum MarketChainsType {
-			CALL_AND_PUT,
-			COVERED_CALL,
-			CALL,
-			PUT,
-		}
-		public enum MarketChainsExpiration {
-			JAN,
-			FEB,
-			MAR,
-			APR,
-			MAY,
-			JUN,
-			JUL,
-			AUG,
-			SEP,
-			OCT,
-			NOV,
-			DEC,
-			ALL,
-			LEAPS,
-			ALL_LEAPS,
-			WEEKLYS,
-		}
-		public enum MarketChainsRange {
-			OUT_THE_MONEY,
-			IN_THE_MONEY,
-			NEAR_THE_MONEY,
-			AT_THE_MONEY,
-			MORE,
-			ALL_THE_MONEY,
-		}
-		public enum MarketQuotesType {
-			CALL,
-			PUT,
-		}
-		
 		private const string BaseUri = "https://api.tradeking.com/v1/";
 		private const string OAuthVersion = "1.0";
 		private const string TkVersion = "1.0-RC1";
