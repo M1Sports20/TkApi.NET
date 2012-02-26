@@ -55,7 +55,7 @@ namespace TkApi {
 				System.Threading.Thread.Sleep((int)retryTimeout);
 			}
 			if (retries == 0) // Failed
-				throw new Exception("Failed to get web request.");
+				throw new Exception("Failed to get web request. (" + func.Method.Name + ")");
 			
 			return result;
 		}
@@ -324,7 +324,7 @@ namespace TkApi {
 		public override UtilityDocumentation GetUtility_Documentation() {
 			TimeSpan ts = DateTime.Now - _utilityDocumentation.AccessTime;
 			if (ts.TotalMilliseconds > CacheTimeout) {
-				RetryFunc(() => _utilityVersion.Data = base.GetUtility_Documentation(), RetryCount, RetryDelay);
+				RetryFunc(() => _utilityDocumentation.Data = base.GetUtility_Documentation(), RetryCount, RetryDelay);
 				_utilityDocumentation.AccessTime = DateTime.Now;
 			}
 			return (UtilityDocumentation)_utilityDocumentation.Data;
@@ -334,7 +334,7 @@ namespace TkApi {
 		public override UtilityStatus GetUtility_Status () {
 			TimeSpan ts = DateTime.Now - _utilityStatus.AccessTime;
 			if (ts.TotalMilliseconds > CacheTimeout) {
-				RetryFunc(() => _utilityVersion.Data = base.GetUtility_Status(), RetryCount, RetryDelay);
+				RetryFunc(() => _utilityStatus.Data = base.GetUtility_Status(), RetryCount, RetryDelay);
 				_utilityStatus.AccessTime = DateTime.Now;
 			}
 			return (UtilityStatus)_utilityStatus.Data;
