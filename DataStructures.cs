@@ -21,6 +21,7 @@ Copyright (c) 2011-2012, Michael D. Spradling (mike@mspradling.com)
 
 using System;
 using Newtonsoft.Json;
+using System.Reflection;
 
 
 namespace TkApi
@@ -124,7 +125,48 @@ namespace TkApi
 			[JsonProperty("error")] // Some errors are here
 			public string Error { get; set; }
 			
-
+			
+			public static bool operator ==(TKBaseType lhs, TKBaseType rhs) {
+				if (ReferenceEquals(lhs, rhs)) return true;
+				
+				// Cast to object to prevent recursion
+				if ((object)lhs == null || (object)rhs == null) return false;
+			
+				return lhs.Equals(rhs);
+			}
+			public static bool operator !=(TKBaseType lhs, TKBaseType rhs) {
+			 	return !(lhs == rhs);
+			}
+			public override bool Equals(object obj) {
+				if (obj == null) return false; // Must be here to adhere to Microsoft's standard for overriding Equals
+				
+				if (obj.GetType() != this.GetType()) return false; // Are they the same object type
+				
+				bool equal = true;
+				
+				foreach (PropertyInfo myPropertyInfo in this.GetType().GetProperties()) {
+					// Skip Id.  This is unique for every transaction
+					if (myPropertyInfo.Name != "Id") {
+		                foreach (PropertyInfo objPropertyInfo in obj.GetType().GetProperties()) {
+		                    if (myPropertyInfo.Name == objPropertyInfo.Name) {
+								object myProp = myPropertyInfo.GetValue(this, null);
+								object objProp = objPropertyInfo.GetValue(obj, null);
+								if (myProp != null && objProp != null) {
+							    	equal = myProp.ToString() == objProp.ToString();
+								} else if (myProp == null && objProp == null) {
+									// Do nothing
+								} else {
+									equal = false;
+								}
+								
+		                        if (!equal) break;
+		                    }
+		                }
+		                if (!equal) break;
+					}
+	            }
+				return equal;
+			}
 		}
 		
 		public class Accounts: TKBaseType {
