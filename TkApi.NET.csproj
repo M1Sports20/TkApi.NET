@@ -14,7 +14,7 @@
     <UpgradeBackupLocation />
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -37,6 +37,15 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <WarningLevel>4</WarningLevel>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterClean" command="rm -rf TkApi.NET TkApi.NET.zip" workingdir="${TargetDir}" />
+        <Command type="AfterBuild" command="mkdir TkApi.NET" workingdir="${TargetDir}" />
+        <Command type="AfterBuild" command="mono /usr/local/bin/ILRepack.exe /internalize /out:TkApi.NET/TkApi.NET.dll TkApi.NET.dll Newtonsoft.Json.Net35.dll" workingdir="${TargetDir}" />
+        <Command type="AfterBuild" command="cp copying.lesser.txt copying.txt readme.txt ${TargetDir}/TkApi.NET" workingdir="${ProjectDir}" />
+        <Command type="AfterBuild" command="zip TkApi.NET.zip TkApi.NET/*" workingdir="${TargetDir}" externalConsole="true" />
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <WarningLevel>4</WarningLevel>
@@ -46,9 +55,6 @@
       <HintPath>3rdParty\JSON.NET\Bin\Net35\Newtonsoft.Json.Net35.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,11 @@
 TkApi.NET is an implementation of the TradeKing API in .NET.
 
 This project is in the alpha stage.  The API is feature
-complete.  However, it has not been tested.  I do not recommend
-using this in its current state.
+complete.  However, it has not been tested well nor
+documented.
 
-This project depends on the JSON.NET 3.5 DLL which can be found at
-http://json.codeplex.com/
+When building this project depends on the JSON.NET 3.5 DLL
+which can be found at http://json.codeplex.com/
 
 This library is released under LGPL license. That means you can use
 it in your projects even if they are under free or proprietary licenses

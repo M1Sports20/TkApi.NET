@@ -5,7 +5,7 @@ using System.Text;
 using System.Web;
 
 namespace OAuth {
-	public class OAuthBase {
+	internal class OAuthBase {
 
         /// <summary>
         /// Provides a predefined set of algorithms that are supported officially by the protocol

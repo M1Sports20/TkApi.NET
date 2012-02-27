@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-public class Fifo<T>:ICollection<T>
+internal class Fifo<T>:ICollection<T>
 {
     private List<T> _list = new List<T>();
     private int _startIndex = -1;
