@@ -97,7 +97,7 @@ namespace TkApi {
 		}
 		
 		private Fifo<TkCacheData> _accountsSingle = new Fifo<TkCacheData>(CacheSize);
-		public override AccountsSingle GetAccounts (string accountNumber) {
+		public override AccountsSingle GetAccounts(string accountNumber) {
 			TkCacheData cache = null;
 
 			foreach (TkCacheData c in _accountsSingle) {
@@ -221,33 +221,7 @@ namespace TkApi {
 			}
 			return (Orders)cache.Data;
 		}
-		
-		private Fifo<TkCacheData> _marketChains = new Fifo<TkCacheData>(CacheSize);
-		public override MarketChain GetMarket_Chains (string symbol, MarketChains_Type type, MarketChains_Expiration expiration, MarketChains_Range range)	{
-			TkCacheData cache = null;
-			string key = symbol + type.ToString() + expiration.ToString() + range.ToString();
 			
-			foreach (TkCacheData c in _marketChains) {
-				if (c.Key == key) {
-					cache = c;
-					break;
-				}
-			}
-			// Add if not found
-			if (cache == null) {
-				cache = new TkCacheData();
-				cache.Key = key;
-				_marketChains.Add(cache);
-			}
-					
-			TimeSpan ts = DateTime.Now - cache.AccessTime;
-			if (ts.TotalMilliseconds > CacheTimeout) {
-				RetryFunc(() => cache.Data = base.GetMarket_Chains(symbol, type, expiration, range), RetryCount, RetryDelay);
-				cache.AccessTime = DateTime.Now;
-			}
-			return (MarketChain)cache.Data;
-		}
-		
 		private TkCacheData _marketClock = new TkCacheData();
 		public override MarketClock GetMarket_Clock() {
 			TimeSpan ts = DateTime.Now - _marketClock.AccessTime;
@@ -258,13 +232,11 @@ namespace TkApi {
 			return (MarketClock)_marketClock.Data;
 		}
 		
-		private Fifo<TkCacheData> _marketQuotes = new Fifo<TkCacheData>(CacheSize);
-		public override Quotess GetMarket_Quotes(string symbol, string watchlist, bool delayed) {
+		private Fifo<TkCacheData> _marketExtQuotes = new Fifo<TkCacheData>(CacheSize);
+		public override MarketExtQuotes GetMarket_ExtQuotes(string symbol) {
 			TkCacheData cache = null;
-			string key = symbol + watchlist + delayed.ToString();
-	
-			foreach (TkCacheData c in _marketQuotes) {
-				if (c.Key == key) {
+			foreach (TkCacheData c in _marketExtQuotes) {
+				if (c.Key == symbol) {
 					cache = c;
 					break;
 				}
@@ -272,25 +244,23 @@ namespace TkApi {
 			// Add if not found
 			if (cache == null) {
 				cache = new TkCacheData();
-				cache.Key = key;
-				_marketQuotes.Add(cache);
+				cache.Key = symbol;
+				_marketExtQuotes.Add(cache);
 			}
-					
+			
 			TimeSpan ts = DateTime.Now - cache.AccessTime;
 			if (ts.TotalMilliseconds > CacheTimeout) {
-				RetryFunc(() => cache.Data = base.GetMarket_Quotes(symbol, watchlist, delayed), RetryCount, RetryDelay);
+				RetryFunc(() => cache.Data = base.GetMarket_ExtQuotes(symbol), RetryCount, RetryDelay);
 				cache.AccessTime = DateTime.Now;
 			}
-			return (Quotess)cache.Data;
+			return (MarketExtQuotes)cache.Data;
 		}
-	
-		private Fifo<TkCacheData> _marketQuotesOptions = new Fifo<TkCacheData>(CacheSize);
-		public override Quotess GetMarket_Quotes(string underlying, DateTime expiration, MarketQuotes_Type type, double strike, bool delayed) {
+		
+		private Fifo<TkCacheData> _marketOptionsStrikes = new Fifo<TkCacheData>(CacheSize);
+		public override MarketOptionsStrikes GetMarket_OptionStrikes(string symbol) {
 			TkCacheData cache = null;
-			string key = underlying + expiration.ToString() + type.ToString() + strike.ToString() + delayed.ToString();
-	
-			foreach (TkCacheData c in _marketQuotesOptions) {
-				if (c.Key == key) {
+			foreach (TkCacheData c in _marketOptionsStrikes) {
+				if (c.Key == symbol) {
 					cache = c;
 					break;
 				}
@@ -298,16 +268,40 @@ namespace TkApi {
 			// Add if not found
 			if (cache == null) {
 				cache = new TkCacheData();
-				cache.Key = key;
-				_marketQuotesOptions.Add(cache);
+				cache.Key = symbol;
+				_marketOptionsStrikes.Add(cache);
 			}
-					
+			
 			TimeSpan ts = DateTime.Now - cache.AccessTime;
 			if (ts.TotalMilliseconds > CacheTimeout) {
-				RetryFunc(() => cache.Data = base.GetMarket_Quotes(underlying, expiration, type, strike, delayed), RetryCount, RetryDelay);
+				RetryFunc(() => cache.Data = base.GetMarket_OptionStrikes(symbol), RetryCount, RetryDelay);
 				cache.AccessTime = DateTime.Now;
 			}
-			return (Quotess)cache.Data;
+			return (MarketOptionsStrikes)cache.Data;
+		}
+		
+		private Fifo<TkCacheData> _marketOptionsExpirations = new Fifo<TkCacheData>(CacheSize);
+		public override MarketOptionsExpirations GetMarket_OptionExpirations(string symbol) {
+			TkCacheData cache = null;
+			foreach (TkCacheData c in _marketOptionsExpirations) {
+				if (c.Key == symbol) {
+					cache = c;
+					break;
+				}
+			}
+			// Add if not found
+			if (cache == null) {
+				cache = new TkCacheData();
+				cache.Key = symbol;
+				_marketOptionsExpirations.Add(cache);
+			}
+			
+			TimeSpan ts = DateTime.Now - cache.AccessTime;
+			if (ts.TotalMilliseconds > CacheTimeout) {
+				RetryFunc(() => cache.Data = base.GetMarket_OptionExpirations(symbol), RetryCount, RetryDelay);
+				cache.AccessTime = DateTime.Now;
+			}
+			return (MarketOptionsExpirations)cache.Data;
 		}
 		
 		private TkCacheData _memberProfile = new TkCacheData();

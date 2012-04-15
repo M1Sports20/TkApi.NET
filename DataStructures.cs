@@ -57,42 +57,6 @@ namespace TkApi
 	#endregion
 	
 	namespace DataStructures {
-		public enum MarketChains_Type {
-			Call_And_Put,
-			Covered_Call,
-			Call,
-			Put,
-		}
-		public enum MarketChains_Expiration {
-			Jan,
-			Feb,
-			Mar,
-			Apr,
-			May,
-			Jun,
-			Jul,
-			Aug,
-			Sep,
-			Oct,
-			Nov,
-			Dec,
-			All,
-			Leaps,
-			All_Leaps,
-			Weeklys
-		}
-		public enum MarketChains_Range {
-			Out_The_Money,
-			In_The_Money,
-			Near_The_Money,
-			At_The_Money,
-			More,
-			All_The_Money
-		}
-		public enum MarketQuotes_Type {
-			Call,
-			Put
-		}	
 		public enum AccountsHistory_Range {
 			All,
 			Today,
@@ -342,8 +306,20 @@ namespace TkApi
 								[JsonProperty("factor")]
 								public string Factor { get; set; }
 								
+								[JsonProperty("matdt")]
+								public string MatDt { get; set; }
+								
+								[JsonProperty("mmy")]
+								public string Mmy { get; set; }
+								
+								[JsonProperty("mult")]
+								public string Mult { get; set; }
+								
 								[JsonProperty("sectyp")]
 								public string SECTyp { get; set; }
+								
+								[JsonProperty("strkpx")]
+								public string StrkPx { get; set; }
 								
 								[JsonProperty("sym")]
 								public string Sym { get; set; }
@@ -573,11 +549,6 @@ namespace TkApi
 			public string SecFee { get; set; }
 		}
 		
-		public class MarketChain: TKBaseType {
-			[JsonProperty("putcalls")]
-			public Quotess.TQuotes PutCalls { get; set; }
-		}
-		
 		public class MarketClock: TKBaseType {
 			[JsonProperty("date")]
 			public string Date { get; set; }
@@ -594,6 +565,322 @@ namespace TkApi
 			
 			[JsonProperty("unixtime")]
 			public string UnixTime { get; set; }
+		}
+		
+		public class MarketExtQuotes: TKBaseType {
+			[JsonProperty("quotes")]
+			public TQuotes Quotes { get; set; }
+			public class TQuotes {
+				[JsonProperty("quote")]
+				[JsonConverter(typeof(ObjectSometimesArrayConverter<TQuote>))]
+				public TQuote[] Quote { get; set; }
+				public class TQuote {
+					[JsonProperty("adp_100")]
+					public string adp_100 { get; set; }
+					
+					[JsonProperty("adp_200")]
+					public string adp_200 { get; set; }
+					
+					[JsonProperty("adp_50")]
+					public string adp_50 { get; set; }
+					
+					[JsonProperty("adv_21")]
+					public string adv_21 { get; set; }
+					
+					[JsonProperty("adv_30")]
+					public string adv_30 { get; set; }
+					
+					[JsonProperty("adv_90")]
+					public string adv_90 { get; set; }
+					
+					[JsonProperty("ask")]
+					public string ask { get; set; }
+					
+					[JsonProperty("ask_time")]
+					public string ask_time { get; set; }
+					
+					[JsonProperty("asksz")]
+					public string asksz { get; set; }
+					
+					[JsonProperty("basis")]
+					public string basis { get; set; }
+					
+					[JsonProperty("beta")]
+					public string beta { get; set; }
+					
+					[JsonProperty("bid")]
+					public string bid { get; set; }
+					
+					[JsonProperty("bid_time")]
+					public string bid_time { get; set; }
+					
+					[JsonProperty("bidsz")]
+					public string bidsz { get; set; }
+					
+					[JsonProperty("bidtick")]
+					public string bidtick { get; set; }
+					
+					[JsonProperty("chg")]
+					public string chg { get; set; }
+					
+					[JsonProperty("chg_sign")]
+					public string chg_sign { get; set; }
+					
+					[JsonProperty("chg_t")]
+					public string chg_t { get; set; }
+					
+					[JsonProperty("cl")]
+					public string cl { get; set; }
+					
+					[JsonProperty("contract_size")]
+					public string contract_size { get; set; }
+					
+					[JsonProperty("cusip")]
+					public string cusip { get; set; }
+					
+					[JsonProperty("date")]
+					public string date { get; set; }
+					
+					[JsonProperty("datetime")]
+					public string datetime { get; set; }
+					
+					[JsonProperty("days_to_expiration")]
+					public string days_to_expiration { get; set; }
+					
+					[JsonProperty("div")]
+					public string div { get; set; }
+					
+					[JsonProperty("divexdate")]
+					public string divexdate { get; set; }
+					
+					[JsonProperty("divfreq")]
+					public string divfreq { get; set; }
+					
+					[JsonProperty("divpaydt")]
+					public string divpaydt { get; set; }
+					
+					[JsonProperty("dollar_value")]
+					public string dollar_value { get; set; }
+					
+					[JsonProperty("eps")]
+					public string eps { get; set; }
+					
+					[JsonProperty("exch")]
+					public string exch { get; set; }
+					
+					[JsonProperty("exch_desc")]
+					public string exch_desc { get; set; }
+					
+					[JsonProperty("hi")]
+					public string hi { get; set; }
+					
+					[JsonProperty("iad")]
+					public string iad { get; set; }
+					
+					[JsonProperty("idelta")]
+					public string idelta { get; set; }
+					
+					[JsonProperty("igamma")]
+					public string igamma { get; set; }
+					
+					[JsonProperty("imp_volatility")]
+					public string imp_volatility { get; set; }
+					
+					[JsonProperty("incr_vl")]
+					public string incr_vl { get; set; }
+					
+					[JsonProperty("irho")]
+					public string irho { get; set; }
+					
+					[JsonProperty("issue_desc")]
+					public string issue_desc { get; set; }
+					
+					[JsonProperty("itheta")]
+					public string itheta { get; set; }
+					
+					[JsonProperty("ivega")]
+					public string ivega { get; set; }
+					
+					[JsonProperty("last")]
+					public string last { get; set; }
+					
+					[JsonProperty("lo")]
+					public string lo { get; set; }
+					
+					[JsonProperty("name")]
+					public string name { get; set; }
+					
+					[JsonProperty("op_delivery")]
+					public string op_delivery { get; set; }
+					
+					[JsonProperty("op_flag")]
+					public string op_flag { get; set; }
+					
+					[JsonProperty("op_style")]
+					public string op_style { get; set; }
+					
+					[JsonProperty("op_subclass")]
+					public string op_subclass { get; set; }
+					
+					[JsonProperty("openinterest")]
+					public string openinterest { get; set; }
+					
+					[JsonProperty("opn")]
+					public string opn { get; set; }
+					
+					[JsonProperty("opt_val")]
+					public string opt_val { get; set; }
+					
+					[JsonProperty("pchg")]
+					public string pchg { get; set; }
+					
+					[JsonProperty("pchg_sign")]
+					public string pchg_sign { get; set; }
+					
+					[JsonProperty("pcls")]
+					public string pcls { get; set; }
+					
+					[JsonProperty("pe")]
+					public string pe { get; set; }
+					
+					[JsonProperty("phi")]
+					public string phi { get; set; }
+					
+					[JsonProperty("plo")]
+					public string plo { get; set; }
+					
+					[JsonProperty("popn")]
+					public string popn { get; set; }
+					
+					[JsonProperty("pr_adp_100")]
+					public string pr_adp_100 { get; set; }
+					
+					[JsonProperty("pr_adp_200")]
+					public string pr_adp_200 { get; set; }
+					
+					[JsonProperty("pr_adp_50")]
+					public string pr_adp_50 { get; set; }
+					
+					[JsonProperty("pr_date")]
+					public string pr_date { get; set; }
+					
+					[JsonProperty("pr_openinterest")]
+					public string pr_openinterest { get; set; }
+					
+					[JsonProperty("prbook")]
+					public string prbook { get; set; }
+					
+					[JsonProperty("prchg")]
+					public string prchg { get; set; }
+					
+					[JsonProperty("prem_mult")]
+					public string prem_mult { get; set; }
+					
+					[JsonProperty("put_call")]
+					public string put_call { get; set; }
+					
+					[JsonProperty("pvol")]
+					public string pvol { get; set; }
+					
+					[JsonProperty("qcond")]
+					public string qcond { get; set; }
+					
+					[JsonProperty("rootsymbol")]
+					public string rootsymbol { get; set; }
+					
+					[JsonProperty("secclass")]
+					public string secclass { get; set; }
+					
+					[JsonProperty("sesn")]
+					public string sesn { get; set; }
+					
+					[JsonProperty("sho")]
+					public string sho { get; set; }
+					
+					[JsonProperty("strikeprice")]
+					public string strikeprice { get; set; }
+					
+					[JsonProperty("symbol")]
+					public string symbol { get; set; }
+					
+					[JsonProperty("tcond")]
+					public string tcond { get; set; }
+					
+					[JsonProperty("timestamp")]
+					public string timestamp { get; set; }
+					
+					[JsonProperty("tr_num")]
+					public string tr_num { get; set; }
+					
+					[JsonProperty("tradetick")]
+					public string tradetick { get; set; }
+					
+					[JsonProperty("trend")]
+					public string trend { get; set; }
+					
+					[JsonProperty("under_cusip")]
+					public string under_cusip { get; set; }
+					
+					[JsonProperty("undersymbol")]
+					public string undersymbol { get; set; }
+					
+					[JsonProperty("vl")]
+					public string vl { get; set; }
+					
+					[JsonProperty("volatility12")]
+					public string volatility12 { get; set; }
+					
+					[JsonProperty("vwap")]
+					public string vwap { get; set; }
+					
+					[JsonProperty("wk52hi")]
+					public string wk52hi { get; set; }
+					
+					[JsonProperty("wk52hidate")]
+					public string wk52hidate { get; set; }
+					
+					[JsonProperty("wk52lo")]
+					public string wk52lo { get; set; }
+					
+					[JsonProperty("wk52lodate")]
+					public string wk52lodate { get; set; }
+					
+					[JsonProperty("xdate")]
+					public string xdate { get; set; }
+					
+					[JsonProperty("xday")]
+					public string xday { get; set; }
+					
+					[JsonProperty("xmonth")]
+					public string xmonth { get; set; }
+					
+					[JsonProperty("xyear")]
+					public string xyear { get; set; }
+					
+					[JsonProperty("yield")]
+					public string yield { get; set; }
+				}
+			}
+		}
+		
+		public class MarketOptionsStrikes: TKBaseType {
+			[JsonProperty("prices")]
+			public TPrices Prices { get; set; }
+			public class TPrices  {
+				[JsonProperty("price")]
+				[JsonConverter(typeof(ObjectSometimesArrayConverter<string>))]
+				public string[] Price { get; set; }
+			}
+		}
+		
+		public class MarketOptionsExpirations: TKBaseType {
+			[JsonProperty("expirationdates")]
+			public TExpirationDates ExpirationDates { get; set; }
+			public class TExpirationDates  {
+				[JsonProperty("date")]
+				[JsonConverter(typeof(ObjectSometimesArrayConverter<string>))]
+				public string[] Date { get; set; }
+			}
 		}
 		
 		public class Quotess: TKBaseType {

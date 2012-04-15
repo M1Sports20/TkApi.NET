@@ -239,33 +239,20 @@ namespace TkApi {
 			string response = RequestSync(req);
 			return JsonConvert.DeserializeObject<OrdersPost>(response);
 		}
-		public virtual MarketChain GetMarket_Chains(string symbol, MarketChains_Type type, MarketChains_Expiration expiration, MarketChains_Range range) {
-			NameValueCollection q = new NameValueCollection();
-			q.Add ("underlying", symbol);
-			q.Add("type", type.ToString().ToLower());
-			q.Add("expiration", expiration.ToString().ToLower());
-			q.Add("range", range.ToString().ToLower());
-			
-			RequestData req = new RequestData(RequestMethod.GET, "market/chains", true, q, null, null);
-			string response = RequestSync(req);
-			return JsonConvert.DeserializeObject<MarketChain>(response);
-		}
 		public virtual MarketClock GetMarket_Clock() {
 			RequestData req = new RequestData(RequestMethod.GET, "market/clock", false, null, null, null);
 			string response = RequestSync(req);
 			return JsonConvert.DeserializeObject<MarketClock>(response);
 		}
-		public virtual Quotess GetMarket_Quotes(string symbol, string watchlist, bool delayed) {
-			NameValueCollection q = new NameValueCollection();
-			if (!String.IsNullOrEmpty(symbol)) q.Add("symbols", symbol);
-			if (!String.IsNullOrEmpty(watchlist)) q.Add("watchlist", watchlist);
-			q.Add("delayed", delayed.ToString().ToLower());
-			
-			RequestData req = new RequestData(RequestMethod.GET, "market/quotes", true, q, null, null);
+		public virtual MarketExtQuotes GetMarket_ExtQuotes(string symbol) {
+			string postData = "symbols=" + symbol;
+
+			RequestData req = new RequestData(RequestMethod.POST, "market/ext/quotes", true, null, null, postData);
 			string response = RequestSync(req);
-			return JsonConvert.DeserializeObject<Quotess>(response);		
+			return JsonConvert.DeserializeObject<MarketExtQuotes>(response);
 		}
-		public Quotess GetMarket_Quotes(string[] symbols, string watchlist, bool delayed) {
+		// TODO: // Will this call the other one in cahched version
+		public MarketExtQuotes GetMarket_ExtQuotes(string[] symbols) {
 			StringBuilder symbol = new StringBuilder();
 			foreach (string idx in symbols) {
 				symbol.Append(idx + ",");
@@ -274,20 +261,27 @@ namespace TkApi {
 			// Remove last comma
 			string s = symbol.ToString();
 			s = s.Substring(0,s.Length - 1);
-			return GetMarket_Quotes(s, watchlist, delayed);
-		}
-		public virtual Quotess GetMarket_Quotes(string underlying, DateTime expiration, MarketQuotes_Type type, double strike, bool delayed) {
+
+			return GetMarket_ExtQuotes(s);
+		}		
+		// TODO: MarketOptionsSearch
+		public virtual MarketOptionsStrikes GetMarket_OptionStrikes(string symbol) {
 			NameValueCollection q = new NameValueCollection();
-			q.Add("underlying", underlying);
-			q.Add("expiration", expiration.ToString("yyyy-MM-dd"));
-			q.Add("type", type.ToString().ToLower());
-			q.Add("strike", strike.ToString());
-			q.Add("delayed", delayed.ToString().ToLower());
-			
-			RequestData req = new RequestData(RequestMethod.GET, "market/quotes", true, q, null, null);
+			q.Add("symbol", symbol);
+		
+			RequestData req = new RequestData(RequestMethod.GET, "market/options/strikes", true, q, null, null);
 			string response = RequestSync(req);
-			return JsonConvert.DeserializeObject<Quotess>(response);
+			return JsonConvert.DeserializeObject<MarketOptionsStrikes>(response);
 		}
+		public virtual MarketOptionsExpirations GetMarket_OptionExpirations(string symbol) {
+			NameValueCollection q = new NameValueCollection();
+			q.Add("symbol", symbol);
+		
+			RequestData req = new RequestData(RequestMethod.GET, "market/options/expirations", true, q, null, null);
+			string response = RequestSync(req);
+			return JsonConvert.DeserializeObject<MarketOptionsExpirations>(response);
+		}
+		// TODO: MarketToplists
 		public virtual MemberProfile GetMember_Profile() {
 			RequestData req = new RequestData(RequestMethod.GET, "member/profile", true, null, null, null);
 			string response = RequestSync(req);
