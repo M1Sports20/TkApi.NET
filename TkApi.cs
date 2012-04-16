@@ -20,21 +20,157 @@ Copyright (c) 2011-2012, Michael D. Spradling (mike@mspradling.com)
 #endregion
 
 using System;
+using System.Collections.Generic;
 using TkApi.DataStructures;
+using TkApi.FixMl;
 
 namespace TkApi {
+	public class Order {
+		private string _fixMl;
+	
+		public Order(string fixml) {
+			_fixMl = fixml;
+		}
+		public string FixMl {
+			get {
+				return _fixMl;
+			}
+		}
+		public string Text {
+			get {
+				return FixmlParse.GetText(_fixMl);
+			}
+		}
+		public PositionEffect_t PositionEffect {
+			get {
+				return FixmlParse.GetPositionEffect(_fixMl);
+			}
+		}
+		public DateTime TransactTime {
+			get {
+				return FixmlParse.GetTransactTime(_fixMl);
+			}
+		}
+		public DateTime TradeDate {
+			get {
+				return FixmlParse.GetTradeDate(_fixMl);
+			}
+		}
+		public double LeavesQuantity {
+			get {
+				return FixmlParse.GetLeavesQuantity(_fixMl);
+			}
+		}
+		public TimeInForce_t TimeInForce {
+			get {
+				return FixmlParse.GetTimeInForce(_fixMl);
+			}
+		}
+		public double Price {
+			get {
+				return FixmlParse.GetPrice(_fixMl);
+			}
+		}
+		public OrderType_t OrderType {
+			get {
+				return FixmlParse.GetOrderType(_fixMl);
+			}
+		}
+		public SideOfOrder_t SideOfOrder {
+			get {
+				return FixmlParse.GetSideOfOrder(_fixMl);
+			}
+		}
+		public AccountType_t AccountType {
+			get {
+				return FixmlParse.GetAccountType(_fixMl);
+			}
+		}
+		public string Account {
+			get {
+				return FixmlParse.GetAccount(_fixMl);
+			}
+		}
+		public OrderStatus_t OrderStatus {
+			get {
+				return FixmlParse.GetOrderStatus(_fixMl);
+			}
+		}
+		public string Id {
+			get {
+				return FixmlParse.GetId(_fixMl);
+			}
+		}
+		public string OrderId {
+			get {
+				return FixmlParse.GetOrderId(_fixMl);
+			}
+		}
+		public string SecurityDescription {
+			get {
+				return FixmlParse.GetSecurityDescription(_fixMl);
+			}
+		}
+		public double ContractMultiplier {
+			get {
+				return FixmlParse.GetContractMultiplier(_fixMl);
+			}
+		}
+		public double StrikePrice {
+			get {
+				return FixmlParse.GetStrikePrice(_fixMl);
+			}
+		}
+		public DateTime MaturityDate {
+			get {
+				return FixmlParse.GetMaturityDate(_fixMl);
+			}
+		}
+		public DateTime MaturityMonthYear {
+			get {
+				return FixmlParse.GetMaturityMonthYear(_fixMl);
+			}
+		}
+		public SecurityType_t SecurityType {
+			get {
+				return FixmlParse.GetSecurityType(_fixMl);
+			}
+		}
+		public string Symbol {
+			get {
+				return FixmlParse.GetSymbol(_fixMl);
+			}
+		}
+		public string UnderlyingSymbol {
+			get {
+				return FixmlParse.GetUnderlyingSymbol(_fixMl);
+			}
+		}
+		public double Quantity {
+			get {
+				return FixmlParse.GetQuantity(_fixMl);
+			}
+		}	
+	}
+		
 	public class TkApi {
 		private const uint CacheTimeout = 1000; // One second(s)
 		private TkRestCache tk = null;
 		
-		public enum MarketStatus {
+		public enum MarketStatus_t {
 			Open,
 			Closed
-		};
+		}
 		
-		public TkApi (string consumerKey, string consumerSecret, string accessToken, string accessSecret) {
+		
+		public TkApi(string consumerKey, string consumerSecret, string accessToken, string accessSecret) {
 			tk = new TkRestCache(consumerKey, consumerSecret, accessToken, accessSecret);
 			tk.CacheTimeout = CacheTimeout;
+		}
+		
+		public TkApi(TkRestCache tk) {
+			this.tk = tk;
+			tk.CacheTimeout = CacheTimeout; // TODO: We should not modify the CacheTimeout
 		}
 		
 		#region Market/Clock Accessors
@@ -42,10 +178,10 @@ namespace TkApi {
 			MarketClock market = tk.GetMarket_Clock();
 			return DateTime.Parse(market.Date);
 		}
-		public MarketStatus GetMarketState(out string message) {
+		public MarketStatus_t GetMarketState(out string message) {
 			MarketClock market = tk.GetMarket_Clock();
 			message = market.Message;
-			return (MarketStatus)Enum.Parse(typeof(MarketStatus), market.Status.Current, true);
+			return (MarketStatus_t)Enum.Parse(typeof(MarketStatus_t), market.Status.Current, true);
 		}
 		#endregion
 		#region Member/Profile Accessors
@@ -297,6 +433,30 @@ namespace TkApi {
 			return version.Version;
 		}
 		#endregion
+		
+		/// <summary>
+		/// Gets orders that have been partially filled or completely filled for the day.
+		/// </summary>
+		/// <returns>
+		/// The executed orders.
+		/// </returns>
+		/// <param name='accountNumber'>
+		/// Account Number.
+		/// </param>
+		public List<Order> GetExecutedOrders(string accountNumber) {
+			List<Order> openOrders = new List<Order>();
+			Orders orders = tk.GetAccounts_Orders(accountNumber);
+			if (orders == null || orders.OrderStatus == null) return openOrders;
+			
+			foreach (Orders.TOrderStatus.TOrder orderStatus in orders.OrderStatus.Order) {
+				Order order = new Order(orderStatus.FixmlMessage);
+				if (order.OrderStatus == OrderStatus_t.PartiallyFilled ||
+				    order.OrderStatus == OrderStatus_t.Filled) {
+					openOrders.Add(order);	
+				}
+			}
+			return openOrders;
+		}
 	}
 }
 
