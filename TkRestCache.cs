@@ -55,7 +55,8 @@ namespace TkApi {
 				System.Threading.Thread.Sleep((int)retryTimeout);
 			}
 			if (retries == 0) // Failed
-				throw new Exception("Failed to get web request. (" + func.Method.Name + ")");
+				throw new Exception("Failed to get web request. (" + func.Method.Name + ")" +
+									  " Limit: " + this.XRateLimitUsed + "/" + this.XRateLimitLimit);
 			
 			return result;
 		}
